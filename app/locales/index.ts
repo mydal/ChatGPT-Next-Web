@@ -1,6 +1,7 @@
 import cn from "./cn";
 import en from "./en";
 import tw from "./tw";
+import id from "./id";
 import fr from "./fr";
 import es from "./es";
 import it from "./it";
@@ -12,6 +13,8 @@ import ru from "./ru";
 import no from "./no";
 import cs from "./cs";
 import ko from "./ko";
+import ar from "./ar";
+import bn from "./bn";
 import { merge } from "../utils/merge";
 
 import type { LocaleType } from "./cn";
@@ -23,6 +26,7 @@ const ALL_LANGS = {
   tw,
   jp,
   ko,
+  id,
   fr,
   es,
   it,
@@ -32,6 +36,8 @@ const ALL_LANGS = {
   ru,
   cs,
   no,
+  ar,
+  bn,
 };
 
 export type Lang = keyof typeof ALL_LANGS;
@@ -44,6 +50,7 @@ export const ALL_LANG_OPTIONS: Record<Lang, string> = {
   tw: "繁體中文",
   jp: "日本語",
   ko: "한국어",
+  id: "Indonesia",
   fr: "Français",
   es: "Español",
   it: "Italiano",
@@ -53,6 +60,8 @@ export const ALL_LANG_OPTIONS: Record<Lang, string> = {
   ru: "Русский",
   cs: "Čeština",
   no: "Nynorsk",
+  ar: "العربية",
+  bn: "বাংলা",
 };
 
 const LANG_KEY = "lang";
@@ -109,4 +118,14 @@ export function getLang(): Lang {
 export function changeLang(lang: Lang) {
   setItem(LANG_KEY, lang);
   location.reload();
+}
+
+export function getISOLang() {
+  const isoLangString: Record<string, string> = {
+    cn: "zh-Hans",
+    tw: "zh-Hant",
+  };
+
+  const lang = getLang();
+  return isoLangString[lang] ?? lang;
 }
