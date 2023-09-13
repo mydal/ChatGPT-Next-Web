@@ -89,7 +89,10 @@ import { ChatCommandPrefix, useChatCommand, useCommand } from "../command";
 import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
-
+import { UploadOutlined } from "@ant-design/icons";
+import { message, Upload } from "antd";
+import type { UploadChangeParam } from "antd/es/upload";
+import type { RcFile, UploadProps } from "antd/es/upload/interface";
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
 });
@@ -409,6 +412,7 @@ export function ChatActions(props: {
   scrollToBottom: () => void;
   showPromptHints: () => void;
   hitBottom: boolean;
+  doSubmit: (userInput: string) => void;
 }) {
   const config = useAppConfig();
   const navigate = useNavigate();
@@ -439,7 +443,18 @@ export function ChatActions(props: {
     [config],
   );
   const [showModelSelector, setShowModelSelector] = useState(false);
-
+  const beforeUpload = (file: RcFile) => {
+    const isJpgOrPng = file.type === "application/pdf";
+    if (!isJpgOrPng) {
+      message.error("研报文件类型错误");
+    }
+    return isJpgOrPng;
+  };
+  const onChange: UploadProps["onChange"] = (info: UploadChangeParam) => {
+    if (info.file.status === "done" && info.file.response.code === "1000") {
+      props.doSubmit(info.file.response.data);
+    }
+  };
   return (
     <div className={styles["chat-input-actions"]}>
       {couldStop && (
@@ -514,7 +529,24 @@ export function ChatActions(props: {
         text={currentModel}
         icon={<RobotIcon />}
       />
-
+      <ChatAction
+        onClick={() => console.log(111)}
+        text={"研报上传"}
+        icon={
+          <Upload
+            name={"file"}
+            showUploadList={false}
+            action={
+              "http://test-mws.dn8188.com/chat-gpt/extractContent" ||
+              `${process.env.BASE_URL}/extractContent`
+            }
+            beforeUpload={beforeUpload}
+            onChange={onChange}
+          >
+            <UploadOutlined />
+          </Upload>
+        }
+      />
       {showModelSelector && (
         <Selector
           defaultSelectedValue={currentModel}
@@ -1242,6 +1274,7 @@ function _Chat() {
           showPromptModal={() => setShowPromptModal(true)}
           scrollToBottom={scrollToBottom}
           hitBottom={hitBottom}
+          doSubmit={doSubmit}
           showPromptHints={() => {
             // Click again to close
             if (promptHints.length > 0) {

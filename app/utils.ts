@@ -9,7 +9,7 @@ export function trimTopic(topic: string) {
 export async function copyToClipboard(text: string) {
   try {
     if (window.__TAURI__) {
-      window.__TAURI__.writeText(text);
+      await window.__TAURI__.writeText(text);
     } else {
       await navigator.clipboard.writeText(text);
     }
@@ -125,8 +125,7 @@ function getDomContentWidth(dom: HTMLElement) {
   const style = window.getComputedStyle(dom);
   const paddingWidth =
     parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-  const width = dom.clientWidth - paddingWidth;
-  return width;
+  return dom.clientWidth - paddingWidth;
 }
 
 function getOrCreateMeasureDom(id: string, init?: (dom: HTMLElement) => void) {
@@ -164,10 +163,7 @@ export function autoGrowTextArea(dom: HTMLTextAreaElement) {
     window.getComputedStyle(singleLineDom).height,
   );
 
-  const rows =
-    Math.round(height / singleLineHeight) + (endWithEmptyLine ? 1 : 0);
-
-  return rows;
+  return Math.round(height / singleLineHeight) + (endWithEmptyLine ? 1 : 0);
 }
 
 export function getCSSVar(varName: string) {
