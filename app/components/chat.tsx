@@ -537,7 +537,7 @@ export function ChatActions(props: {
             name={"file"}
             showUploadList={false}
             action={
-              "http://test-mws.dn8188.com/chat-gpt/extractContent" ||
+              "//test-mws.dn8188.com/chat-gpt/extractContent" ||
               `${process.env.BASE_URL}/extractContent`
             }
             beforeUpload={beforeUpload}
