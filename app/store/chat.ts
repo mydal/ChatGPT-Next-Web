@@ -1,6 +1,3 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
 import { trimTopic } from "../utils";
 
 import Locale, { getLang } from "../locales";
@@ -276,10 +273,7 @@ export const useChatStore = createPersistStore(
           index = Math.min(sessions.length - 1, Math.max(0, index));
           set(() => ({ currentSessionIndex: index }));
         }
-
-        const session = sessions[index];
-
-        return session;
+        return sessions[index];
       },
 
       onNewMessage(message: ChatMessage) {

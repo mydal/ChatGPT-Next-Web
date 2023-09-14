@@ -90,7 +90,7 @@ import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { UploadOutlined } from "@ant-design/icons";
-import { message, Upload } from "antd";
+import { Button, message, Upload } from "antd";
 import type { UploadChangeParam } from "antd/es/upload";
 import type { RcFile, UploadProps } from "antd/es/upload/interface";
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
@@ -529,24 +529,37 @@ export function ChatActions(props: {
         text={currentModel}
         icon={<RobotIcon />}
       />
-      <ChatAction
-        onClick={() => console.log(111)}
-        text={"研报上传"}
-        icon={
-          <Upload
-            name={"file"}
-            showUploadList={false}
-            action={
-              "//test-mws.dn8188.com/chat-gpt/extractContent" ||
-              `${process.env.BASE_URL}/extractContent`
+      <div
+        className={`${styles["chat-input-action"]} clickable`}
+        style={{
+          padding: "4px 5px 4px 3px",
+        }}
+      >
+        <Upload
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+          name={"file"}
+          showUploadList={false}
+          action={"//test-mws.dn8188.com/chat-gpt/extractContent"}
+          beforeUpload={beforeUpload}
+          onChange={onChange}
+        >
+          <Button
+            size={"small"}
+            type={"link"}
+            style={{ fontSize: "12px", color: "rgb(48, 48, 48)" }}
+            icon={
+              <UploadOutlined
+                style={{ fontSize: "16px", filter: "invert(0.5)" }}
+              />
             }
-            beforeUpload={beforeUpload}
-            onChange={onChange}
           >
-            <UploadOutlined />
-          </Upload>
-        }
-      />
+            研报上传
+          </Button>
+        </Upload>
+      </div>
       {showModelSelector && (
         <Selector
           defaultSelectedValue={currentModel}
