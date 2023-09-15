@@ -531,9 +531,7 @@ export function ChatActions(props: {
       />
       <div
         className={`${styles["chat-input-action"]} clickable`}
-        style={{
-          padding: "4px 5px 4px 3px",
-        }}
+        style={{ padding: "4px 5px 4px 3px" }}
       >
         <Upload
           style={{
